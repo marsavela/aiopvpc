@@ -75,13 +75,26 @@ _NATIONAL_EXTRA_HOLIDAYS_FOR_P3_PERIOD = {
         date(2025, 12, 8): "(lunes), La Inmaculada Concepción",
         date(2025, 12, 25): "(jueves), Navidad",
     },
+    2026: {
+        date(2026, 1, 1): "(jueves), Año nuevo",
+        date(2026, 1, 6): "(martes), Epifanía del Señor",
+        # date(2026, 4, 2): "(jueves), Jueves Santo",
+        date(2026, 4, 3): "(viernes), Viernes Santo",
+        date(2026, 5, 1): "(viernes), Día del Trabajador",
+        # date(2026, 8, 15): "(sábado), Asunción de la Virgen",
+        date(2026, 10, 12): "(lunes), Día de la Hispanidad",
+        # date(2026, 11, 1): "(domingo), Todos los Santos",
+        # date(2026, 12, 6): "(domingo), Día de la Constitución Española",
+        date(2026, 12, 8): "(martes), La Inmaculada Concepción",
+        date(2026, 12, 25): "(viernes), Navidad",
+    },
 }
 
 
 def _tariff_period_key(local_ts: datetime, zone_ceuta_melilla: bool) -> str:
     """Return period key (P1/P2/P3) for current hour."""
     day = local_ts.date()
-    national_holiday = day in _NATIONAL_EXTRA_HOLIDAYS_FOR_P3_PERIOD[day.year]
+    national_holiday = day in _NATIONAL_EXTRA_HOLIDAYS_FOR_P3_PERIOD.get(day.year, {})
     if national_holiday or day.isoweekday() >= 6 or local_ts.hour < 8:
         return "P3"
     if zone_ceuta_melilla and local_ts.hour in _HOURS_P2_CYM:
